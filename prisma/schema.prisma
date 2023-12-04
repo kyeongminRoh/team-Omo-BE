@@ -6,3 +6,86 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+model Users {
+  userId   int @id @default(autoincrement()) @map("userId")
+  email    String  @map("email")
+  password  String @map("String")
+  nickname  String @map("nickname")
+  imgUrl  String @map("imgUrl")
+  createdAt DateTime @map("createdAt")
+  updatedAt DateTime @map("updatedAt")
+
+  Posts Posts[]
+  Comments Comments[]
+  Likes Likes[]
+  Bookmark Bookmark[]
+
+  @@map("Users" )
+}
+
+
+
+model Posts {
+  postId   int @id @default(autoincrement()) @map("postId")
+  UserId   int @map("UserId")
+  CategoryId int @map("CategoryId")
+  LocationId int @map("LocationId")
+  content String @map("content")
+  imgUrl String @map("imgUrl")
+  likeCount int @map("likeCount")
+  createdAt DateTime @map("createdAt")
+  updatedAt DateTime @map("updatedAt")
+
+
+  User Users @relation(fields: [UserId], references: [userId], onDelete: Cascade)
+  @@map("Posts")
+}
+
+
+model Comments {
+  commentId int default(autoincrement()) @map("contentId")
+  UserId int @map("UserId")
+  PostId int @map("PostId")
+  content String @map("content")
+  createdAt DateTime @map("createdAt")
+  updatedAt DateTime @map("updatedAt")
+
+  User Users @relation(fields: [UserId], references: [userId], onDelete: Cascade)
+  @@map("Comments")
+}
+
+model Bookmark {
+  UserId int @map("UserId")
+  LocationId int @map("LocationId')
+
+  User Users @relation(fields: [UserId], references: [userId], onDelete: Cascade)
+  @@map("Bookmark")
+}
+
+model Categories {
+  categoryId int @id default(autoincrement()) @map("categoryId")
+  categoryName String @map("categoryName")
+
+  @@map("Categories")
+}
+model Locations {
+  locationId int @id default(autoincrement()) @map("locationId")
+  BookmarkId int @map("BookmarkId")
+  CategoryId int @map("CategoryId")
+  storeName String @map("storeName")
+  address String @map("address")
+  latitude String @map("latitude")
+  longitude String @map("longitude")
+
+
+  @@map("LocationId")
+}
+
+model Likes {
+  likeId int @id default(autoincrement()) @map("likeId")
+  UserId int @map("UserId")
+  PostId int @map("PostId")
+
+  User Users @relation(fields: [UserId], references: [userId], onDelete: Cascade)
+  @@map("Likes")
+}
